@@ -56,6 +56,36 @@ project-root/
 -dotenv (environment variables)
 -Helmet, Express-rate-limit, Mongo-sanitize, XSS-clean
 
+## API Endpoints
+
+## Authentication
+| Method | Endpoint           | Description           | Auth Required |
+| ------ | ------------------ | --------------------- | ------------- |
+| POST   | `/api/auth/signup` | Register a new user   | No            |
+| POST   | `/api/auth/login`  | Login and receive JWT | No            |
+
+
+
+## Thread
+| Method | Endpoint           | Description                                | Auth Required |
+| ------ | ------------------ | ------------------------------------------ | ------------- |
+| POST   | `/api/threads`     | Create a new thread                        |     Yes         |
+| GET    | `/api/threads`     | Get all threads                            |     No          |
+| GET    | `/api/threads/:id` | Get a single thread (with nested comments) | 	 No          |
+| PUT    | `/api/threads/:id` | Update a thread (author only)              | 	 Yes         |
+| DELETE | `/api/threads/:id` | Delete a thread (admin only)               | 	 Yes (Admin) |
+
+
+
+## Comments
+| Method | Endpoint                    | Description                             | Auth Required |
+| ------ | --------------------------- | --------------------------------------- | ------------- |
+| POST   | `/api/threads/:id/comments` | Add a comment to a thread               | 	 Yes         |
+| POST   | `/api/comments/:id/reply`   | Reply to an existing comment (nested)   | 	 Yes         |
+| DELETE | `/api/comments/:id`         | Delete a comment (author or admin only) | 	 Yes         |
+| GET    | `/api/threads/:id`          | Get thread by ID with nested comments   | 	 No          |
+
+
 
 ## Author name
 
