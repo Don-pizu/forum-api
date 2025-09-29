@@ -185,3 +185,42 @@ exports.deleteThread = async (req, res, next) => {
 };
 
 
+
+
+//POST   Create  upvote/downvote
+exports.voteThread = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { vote } = req.body; // 1 or -1
+    const userId = req.user._id;
+
+    if (![1, -1].includes(vote)) 
+      return res.status(400).json({ message: 'Invalid vote. Use 1 (upvote) or -1 (downvote)' });
+    
+
+    const thread = await Thread.findById(id);
+    if (!thread) 
+       return res.status(404).json({ message: 'Thread not found' });
+
+    // check if user already voted
+    const existingVote = thread.votes.find(v => v.user.toString() === userId.toString());
+
+    if (existingVote) {
+      existingVote.vote = vote;  // update the vote
+    } else {
+      thread.votes.push({ user: userId, vote });
+    }
+
+    await thread.save();
+
+    res.status(200).json({ message: 'Vote recorded', votes: thread.votes });
+  } catch (err) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+
+exports.getAllThreadsAdmin = async (req, res) => {
+  const threads = await Thread.find().populate('user', 'username email');
+  res.json(threads);
+};

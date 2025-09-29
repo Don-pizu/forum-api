@@ -16,6 +16,7 @@ const xss = require('xss-clean');
 const authRoutes = require('./routes/authRoutes');
 const threadRoutes = require('./routes/threadRoutes');
 const commentRoutes = require('./routes/commentRoutes');
+const graphqlRoute = require('./routes/graphql'); 
 
 //configure and Load .env variables
 dotenv.config();
@@ -27,7 +28,8 @@ connectDB();
 //helmet
 app.use(
   helmet({
-    crossOriginResourcePolicy: { policy: "cross-origin" }  // browser will not block the access of files from backend to frontebd
+    crossOriginResourcePolicy: { policy: "cross-origin" },  // browser will not block the access of files from backend to frontebd
+    //contentSecurityPolicy: false   // ⬅ disables CSP completely
   })
 );
 
@@ -67,13 +69,17 @@ windowMs: 15 * 60 * 1000, // 15 minutes
 max: 100, // max 100 requests per IP 
 message: 'Too many requests from this IP, please try again later.' 
 }); 
-app.use('/api', limiter);
+app.use('/api', (req, res, next) => {
+  if (req.path === '/graphql') return next(); // skip rate limit for graphql
+  limiter(req, res, next);
+});
 
 
 
 // CORS configuration
 const allowedOrigins = [
-  'http://localhost:5000',   
+  'http://localhost:5000', 
+  'null', 
   //'https://',// deployed backend
   ]; 
 
@@ -102,6 +108,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api', threadRoutes);
 app.use('/api', commentRoutes);
+app.use('/api', graphqlRoute);
 
 
 module.exports = app;

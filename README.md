@@ -67,13 +67,15 @@ project-root/
 
 
 ## Thread
-| Method | Endpoint           | Description                                | Auth Required |
-| ------ | ------------------ | ------------------------------------------ | ------------- |
-| POST   | `/api/threads`     | Create a new thread                        |     Yes         |
-| GET    | `/api/threads`     | Get all threads                            |     No          |
-| GET    | `/api/threads/:id` | Get a single thread (with nested comments) | 	 No          |
-| PUT    | `/api/threads/:id` | Update a thread (author only)              | 	 Yes         |
-| DELETE | `/api/threads/:id` | Delete a thread (admin only)               | 	 Yes (Admin) |
+| Method | Endpoint                | Description                                | Auth Required  |
+| ------ | ----------------------- | ------------------------------------------ | -------------- |
+| POST   | `/api/threads`          | Create a new thread                        |     Yes        | 
+| GET    | `/api/threads`          | Get all threads                            |     No         |
+| GET    | `/api/threads/:id`      | Get a single thread (with nested comments) | 	  No         |
+| PUT    | `/api/threads/:id`      | Update a thread (author only)              | 	  Yes        |
+| DELETE | `/api/threads/:id`      | Delete a thread (admin only)               | 	  Yes (Admin)|
+| POST	 | `/api/threads/:id/vote` | Up and Down vote					        |     Yes		 |
+| GET	 | `/admin/threads`		   | Get all threads							|     Yes (Admin)|
 
 
 
@@ -84,6 +86,13 @@ project-root/
 | POST   | `/api/comments/:id/reply`   | Reply to an existing comment (nested)   | 	 Yes         |
 | DELETE | `/api/comments/:id`         | Delete a comment (author or admin only) | 	 Yes         |
 | GET    | `/api/threads/:id`          | Get thread by ID with nested comments   | 	 No          |
+| POST	 | `/api/comments/:id/vote`    | Up and Down vote					     |     Yes		 |
+| DELETE | `/api/aadmin/comments/:id`  | Delete a comment ( admin only )         | 	 Yes         |
+
+
+## GraphQL API
+  POST    /api/graphql
+
 
 
 

@@ -159,4 +159,55 @@ exports.getThreadById = async (req, res, next) => {
 
 
 
+//POST   Create  upvote/downvote
+exports.voteComment = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { vote } = req.body; // 1 or -1
+    const userId = req.user._id;
 
+    if (![1, -1].includes(vote)) {
+      return res.status(400).json({ message: 'Invalid vote. Use 1 (upvote) or -1 (downvote).' });
+    }
+
+    const comment = await Comment.findById(id);
+    if (!comment) 
+       return res.status(404).json({ message: 'Comment not found' });
+
+    // check if user already voted
+    const existingVote = comment.votes.find(v => v.user.toString() === userId.toString());
+
+    if (existingVote) {
+      existingVote.vote = vote;  // update the vote
+    } else {
+      comment.votes.push({ user: userId, vote });
+    }
+
+    await comment.save();
+
+    res.status(200).json({ message: 'Comment recorded', votes: comment.votes });
+  } catch (err) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+
+
+
+//DELETE      Delete the whole comment from parent and delete nested comment alone
+exports.deleteCommentAdmin = async (req, res, next) => {
+  try {
+    const comment = await Comment.findById(req.params.id);
+
+    if(!comment) 
+      return res.status(404).json({ message: 'Comment not found'});
+
+    //Delete comment 
+    await comment.deleteOne();
+
+    res.status(200).json({ message: 'Comment deleted successfullly'});
+
+  } catch (err) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};

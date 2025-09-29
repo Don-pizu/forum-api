@@ -9,6 +9,10 @@ const threadSchema = new mongoose.Schema({
     type: String, 
     required: true 
   },
+  votes: [{
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    vote: { type: Number, enum: [1, -1] } // 1 = upvote, -1 = downvote
+  }],
   user: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'User', 

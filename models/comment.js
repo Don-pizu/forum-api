@@ -19,7 +19,11 @@ const commentSchema = new mongoose.Schema({
   body: { 
     type: String, 
     required: true 
-  }
+  },
+  votes: [{
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    vote: { type: Number, enum: [1, -1] }
+  }]
 }, { timestamps: true });
 
 module.exports = mongoose.model('Comment', commentSchema);
